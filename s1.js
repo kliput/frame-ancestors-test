@@ -1,4 +1,10 @@
-const http = require('http');
+const https = require('https');
+const fs = require('fs');
+
+const options = {
+  key: fs.readFileSync('./example.key'),
+  cert: fs.readFileSync('./example.crt')
+};
 
 const genHtml = (body) => `<!DOCTYPE html>
 <html lang="en">
@@ -19,23 +25,23 @@ const genHtml = (body) => `<!DOCTYPE html>
 </body>
 </html>`;
 
-const server1 = http.createServer((req, res) => {
+const server1 = https.createServer(options, (req, res) => {
   if (req.url === '/level1.html') {
-    res.end(genHtml('s1-level1 <iframe src="http://public-onedata.org:8092/level2.html" frameborder="0"></iframe>'));
+    res.end(genHtml('s1-level1 <iframe src="https://public-onedata.org:8092/level2.html" frameborder="0"></iframe>'));
   }
 });
 
-const server2 = http.createServer((req, res) => {
+const server2 = https.createServer(options, (req, res) => {
   if (req.url === '/level1.html') {
-    res.end(genHtml('s2-level1 <iframe src="http://public-onedata.org:8092/level2.html" frameborder="0"></iframe>'));
+    res.end(genHtml('s2-level1 <iframe src="https://public-onedata.org:8092/level2.html" frameborder="0"></iframe>'));
   }
   if (req.url === '/level2.html') {
-    res.end(genHtml('s2-level2 <iframe src="http://public-onedata.org:8093/level3.html" frameborder="0"></iframe>'));
+    res.end(genHtml('s2-level2 <iframe src="https://public-onedata.org:8093/level3.html" frameborder="0"></iframe>'));
   }
 });
 
-const server3 = http.createServer((req, res) => {
-  res.setHeader('content-security-policy', 'frame-ancestors http://public-onedata.org:8092');
+const server3 = https.createServer(options, (req, res) => {
+  res.setHeader('content-security-policy', 'frame-ancestors https://public-onedata.org:8092');
   if (req.url === '/level3.html') {
     res.end(genHtml('s3-level3 (end)'));
   }
