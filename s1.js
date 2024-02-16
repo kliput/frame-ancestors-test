@@ -29,6 +29,9 @@ const server1 = https.createServer(options, (req, res) => {
   if (req.url === '/level1.html') {
     res.end(genHtml('s1-level1 <iframe src="https://public-onedata.org:8092/level2.html" frameborder="0"></iframe>'));
   }
+  if (req.url === '/level1-double.html') {
+    res.end(genHtml('s1-level1 (embed 2-1) <iframe src="https://public-onedata.org:8092/level2-1.html" frameborder="0"></iframe>'));
+  }
 });
 
 const server2 = https.createServer(options, (req, res) => {
@@ -37,6 +40,9 @@ const server2 = https.createServer(options, (req, res) => {
   }
   if (req.url === '/level2.html') {
     res.end(genHtml('s2-level2 <iframe src="https://public-onedata.org:8093/level3.html" frameborder="0"></iframe>'));
+  }
+  if (req.url === '/level2-1.html') {
+    res.end(genHtml('s2-level2-1 <iframe src="https://public-onedata.org:8092/level2.html" frameborder="0"></iframe>'));
   }
 });
 
